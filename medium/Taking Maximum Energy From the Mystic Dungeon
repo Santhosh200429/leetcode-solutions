@@ -1,0 +1,37 @@
+"""
+Problem: <Taking Maximum Energy From the Mystic Dungeon>
+Platform: LeetCode
+Difficulty: <Easy/Medium/Hard>
+Author: Santhosh
+
+"""
+
+class Solution {
+    public int maximumEnergy(int[] energyValues, int jump) {
+        // Initialize the maximum energy to the smallest possible integer
+        int maxEnergy = Integer.MIN_VALUE;
+
+        // Get the total number of energy values
+        int n = energyValues.length;
+
+        // Start iterating from the last index backwards
+        int index = n - 1;
+
+        while (index >= 0) {
+            // If jumping ahead by 'jump' is within bounds, add that future energy
+            if (index + jump < n) {
+                energyValues[index] += energyValues[index + jump];
+            }
+
+            // Update maxEnergy if the current energy value is greater
+            maxEnergy = Math.max(energyValues[index], maxEnergy);
+
+            // Move to the previous index
+            index--;
+        }
+
+        // Return the maximum energy possible
+        return maxEnergy;
+    }
+}
+
