@@ -1,0 +1,20 @@
+"""
+Problem: <Smallest Missing Non-negative Integer After Operations>
+Platform: LeetCode
+Difficulty: Medium
+Author: Santhosh
+
+"""
+
+class Solution(object):
+    def findSmallestInteger(self, numbers, divisor):
+        remainder_counts = [0] * divisor
+        for num in numbers:
+            remainder_counts[num % divisor] += 1
+
+        smallest_missing = 0
+        while remainder_counts[smallest_missing % divisor]:
+            remainder_counts[smallest_missing % divisor] -= 1
+            smallest_missing += 1
+
+        return smallest_missing
