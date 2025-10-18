@@ -1,0 +1,13 @@
+"""
+Problem: <Longest Common Prefix>
+Platform: LeetCode
+Difficulty: Easy
+Author: Santhosh
+
+"""
+
+var createHelloWorld = function() { 
+    return function() {
+        return "Hello World";
+    }
+}
