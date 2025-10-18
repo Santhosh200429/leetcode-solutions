@@ -1,0 +1,42 @@
+"""
+Problem: <Maximum Total Damage With Spell Casting
+>
+Platform: LeetCode
+Difficulty: Medium
+Author: Santhosh
+
+"""
+
+class Solution(object):
+    def maximumTotalDamage(self, power_list):
+        from collections import Counter
+
+        power_count = Counter(power_list)
+        sorted_powers = sorted(power_count.keys())
+        total_powers = len(sorted_powers)
+
+        max_damage_dp = [0] * total_powers
+        max_damage_dp[0] = power_count[sorted_powers[0]] * sorted_powers[0]
+
+        for current_index in range(1, total_powers):
+            current_power = sorted_powers[current_index]
+            current_damage = power_count[current_power] * current_power
+
+            left_index = 0
+            right_index = current_index - 1
+            last_compatible_index = -1
+
+            while left_index <= right_index:
+                mid_index = (left_index + right_index) // 2
+                if sorted_powers[mid_index] <= current_power - 3:
+                    last_compatible_index = mid_index
+                    left_index = mid_index + 1
+                else:
+                    right_index = mid_index - 1
+
+            if last_compatible_index >= 0:
+                current_damage += max_damage_dp[last_compatible_index]
+
+            max_damage_dp[current_index] = max(max_damage_dp[current_index - 1], current_damage)
+
+        return max_damage_dp[-1]
