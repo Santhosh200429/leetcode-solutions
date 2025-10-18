@@ -1,0 +1,27 @@
+"""
+Problem: <Longest Common Prefix>
+Platform: LeetCode
+Difficulty: Easy
+Author: Santhosh
+
+"""
+
+class Solution:
+    def longestCommonPrefix(self, strs):
+        if not strs:
+            return ""
+        
+        # Initialize prefix as the first string
+        prefix = strs[0]
+        prefix_len = len(prefix)
+        
+        # Iterate over the rest of the strings
+        for s in strs[1:]:
+            # Reduce prefix length until it matches the start of string s
+            while prefix != s[0:prefix_len]:
+                prefix_len -= 1
+                if prefix_len == 0:
+                    return ""
+                prefix = prefix[0:prefix_len]
+        
+        return prefix
