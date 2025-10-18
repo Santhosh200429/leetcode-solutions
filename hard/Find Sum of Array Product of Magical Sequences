@@ -1,0 +1,72 @@
+"""
+Problem: <Taking Maximum Energy From the Mystic Dungeon>
+Platform: LeetCode
+Difficulty: Medium
+Author: Santhosh
+
+"""
+
+class Solution(object):
+    def magicalSum(self, sequence_length, required_bits, numbers_list):
+        MOD = int(1e9 + 7)
+        total_numbers = len(numbers_list)
+
+        # Precompute combination values C[n][r] = n choose r
+        combination_matrix = [[0] * (sequence_length + 1) for _ in xrange(sequence_length + 1)]
+        for total_count in xrange(sequence_length + 1):
+            combination_matrix[total_count][0] = 1
+            combination_matrix[total_count][total_count] = 1
+            for choose_count in xrange(1, total_count):
+                combination_matrix[total_count][choose_count] = (
+                    combination_matrix[total_count - 1][choose_count - 1] +
+                    combination_matrix[total_count - 1][choose_count]
+                ) % MOD
+
+        # Precompute powers: powers_matrix[number_index][count] = numbers_list[number_index]^count % MOD
+        powers_matrix = [[0] * (sequence_length + 1) for _ in xrange(total_numbers)]
+        for number_index in xrange(total_numbers):
+            powers_matrix[number_index][0] = 1
+            for power_count in xrange(1, sequence_length + 1):
+                powers_matrix[number_index][power_count] = (
+                    powers_matrix[number_index][power_count - 1] * numbers_list[number_index]
+                ) % MOD
+
+        # Initialize DP table: 4D
+        dp_table = [[[[0] * (sequence_length + 1) for _ in xrange(sequence_length + 1)]
+                     for _ in xrange(required_bits + 1)]
+                    for _ in xrange(total_numbers + 1)]
+        dp_table[0][0][0][0] = 1
+
+        # Fill DP table
+        for current_number_index in xrange(total_numbers):
+            for bits_used_so_far in xrange(required_bits + 1):
+                for carry_over_value in xrange(sequence_length + 1):
+                    for elements_chosen_so_far in xrange(sequence_length + 1):
+                        current_dp_value = dp_table[current_number_index][bits_used_so_far][carry_over_value][elements_chosen_so_far]
+                        if current_dp_value == 0:
+                            continue
+
+                        remaining_elements_to_choose = sequence_length - elements_chosen_so_far
+                        for elements_to_choose_now in xrange(remaining_elements_to_choose + 1):
+                            total_with_carry = carry_over_value + elements_to_choose_now
+                            updated_bits_used = bits_used_so_far + (total_with_carry & 1)
+                            updated_carry_over = total_with_carry >> 1
+
+                            if updated_bits_used <= required_bits and updated_carry_over <= sequence_length:
+                                addition_value = current_dp_value * combination_matrix[remaining_elements_to_choose][elements_to_choose_now] % MOD
+                                addition_value = addition_value * powers_matrix[current_number_index][elements_to_choose_now] % MOD
+
+                                dp_table[current_number_index + 1][updated_bits_used][updated_carry_over][elements_chosen_so_far + elements_to_choose_now] = (
+                                    dp_table[current_number_index + 1][updated_bits_used][updated_carry_over][elements_chosen_so_far + elements_to_choose_now] + addition_value
+                                ) % MOD
+
+        # Compute final result
+        final_result = 0
+        for carry_over_value in xrange(sequence_length + 1):
+            carry_bits_count = bin(carry_over_value).count('1')
+            if carry_bits_count <= required_bits:
+                final_result = (
+                    final_result + dp_table[total_numbers][required_bits - carry_bits_count][carry_over_value][sequence_length]
+                ) % MOD
+
+        return final_result
