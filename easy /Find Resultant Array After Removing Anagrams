@@ -1,0 +1,21 @@
+"""
+Problem: <Find Resultant Array After Removing Anagrams>
+Platform: LeetCode
+Difficulty: Easy
+Author: Santhosh
+
+"""
+
+public class Solution {
+public boolean isPalindrome(int number) {
+    String string = Integer.toString(number);
+    String reversed = new StringBuilder(string).reverse().toString();
+    return string.equals(reversed);
+}
+public static void main (String[] args) {
+    Solution solution = new Solution();
+    System.out.println(solution.isPalindrome(121));
+    System.out.println(solution.isPalindrome(-121));
+    System.out.println(solution.isPalindrome(10));
+    }
+}
