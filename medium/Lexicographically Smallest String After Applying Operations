@@ -1,0 +1,34 @@
+"""
+Problem: <Lexicographically Smallest String After Applying Operations>
+Platform: LeetCode
+Difficulty: Medium
+Author: Santhosh
+
+"""
+
+class Solution(object):
+    def findLexSmallestString(self, string, add_value, rotate_value):
+        visited = set([string])
+        smallest = string
+        queue = [string]
+
+        while queue:
+            current_string = queue.pop(0)
+            if current_string < smallest:
+                smallest = current_string
+
+            chars = list(current_string)
+            for index in range(1, len(chars), 2):
+                chars[index] = str((int(chars[index]) + add_value) % 10)
+            added_string = ''.join(chars)
+
+            if added_string not in visited:
+                visited.add(added_string)
+                queue.append(added_string)
+
+            rotated_string = current_string[-rotate_value:] + current_string[:-rotate_value]
+            if rotated_string not in visited:
+                visited.add(rotated_string)
+                queue.append(rotated_string)
+
+        return smallest
