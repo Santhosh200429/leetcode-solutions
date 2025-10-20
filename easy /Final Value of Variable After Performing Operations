@@ -1,0 +1,17 @@
+"""
+Problem: <Final Value of Variable After Performing Operations>
+Platform: LeetCode
+Difficulty: Easy
+Author: Santhosh
+
+"""
+
+class Solution:
+    def finalValueAfterOperations(self, operations_list):
+        final_value = 0
+        for operation in operations_list:
+            if "++" in operation:
+                final_value += 1
+            else:
+                final_value -= 1
+        return final_value
