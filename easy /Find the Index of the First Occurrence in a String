@@ -1,0 +1,15 @@
+"""
+Problem: <Find the Index of the First Occurrence in a String>
+Platform: LeetCode
+Difficulty: Easy
+Author: Santhosh
+"""
+class Solution:
+    def strStr(haystack, needle):
+    # Loop through each possible starting position in 'haystack'
+    for index in range(len(haystack) - len(needle) + 1):
+        # Check if the substring from current index matches 'needle'
+        if haystack[index:index + len(needle)] == needle:
+            return index  # Found match, return starting index
+    return -1  # If 'needle' not found, return -1
+
