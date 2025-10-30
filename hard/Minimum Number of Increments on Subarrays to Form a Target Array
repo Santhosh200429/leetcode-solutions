@@ -1,0 +1,22 @@
+"""
+Problem: <Minimum Number of Increments on Subarrays to Form a Target Array>
+Platform: LeetCode
+Difficulty: Hard 
+Language: Java
+Author: Santhosh
+"""
+
+class Solution {
+    public int minNumberOperations(int[] target) {
+       int result = 0; //store total counts
+       int previous_value = 0; // previous element 
+
+       for (int index : target) {
+        if ( index > previous_value ){
+            result += index - previous_value;
+        }
+        previous_value= index; // update previous value
+       }
+       return result;
+    }
+}
